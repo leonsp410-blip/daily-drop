@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#090909">
-  <title>DROP 30 — Una oportunidad diaria</title>
+  <title>DROP 30</title>
 
   <style>
     * {
@@ -20,7 +20,7 @@
     }
 
     header {
-      height: 85px;
+      height: 90px;
       padding: 0 8%;
       display: flex;
       align-items: center;
@@ -31,7 +31,7 @@
     .logo {
       font-size: 25px;
       font-weight: bold;
-      letter-spacing: 5px;
+      letter-spacing: 6px;
     }
 
     .edition {
@@ -40,17 +40,17 @@
       letter-spacing: 3px;
     }
 
-    .hero {
+    main {
       min-height: 650px;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 90px 20px;
+      padding: 70px 20px;
     }
 
     .content {
-      max-width: 650px;
+      max-width: 750px;
     }
 
     .eyebrow {
@@ -60,58 +60,57 @@
     }
 
     h1 {
-      font-size: clamp(55px, 10vw, 100px);
-      letter-spacing: 7px;
-      margin: 35px 0 20px;
-      line-height: 1;
+      font-size: clamp(45px, 9vw, 90px);
+      letter-spacing: 5px;
+      line-height: 1.1;
+      margin: 35px 0;
     }
 
     .description {
       color: #aaa49a;
-      line-height: 1.9;
       font-size: 15px;
-      max-width: 480px;
-      margin: 25px auto;
-    }
-
-    .status {
-      display: inline-block;
-      border: 1px solid #514a3e;
-      padding: 13px 22px;
-      color: #b9a889;
-      font-size: 10px;
-      letter-spacing: 3px;
-      margin-top: 20px;
+      line-height: 1.9;
+      max-width: 470px;
+      margin: auto;
     }
 
     .divider {
       width: 55px;
       height: 1px;
       background: #b9a889;
-      margin: 35px auto;
+      margin: 40px auto;
+    }
+
+    .status {
+      display: inline-block;
+      border: 1px solid #514a3e;
+      padding: 14px 25px;
+      color: #b9a889;
+      font-size: 10px;
+      letter-spacing: 3px;
     }
 
     .units {
-      font-size: 13px;
+      margin-top: 35px;
+      font-size: 12px;
       letter-spacing: 3px;
-      color: #f5f1e9;
     }
 
     .donation {
-      padding: 85px 20px;
-      text-align: center;
       background: #100f0d;
       border-top: 1px solid #29251f;
+      padding: 65px 20px;
+      text-align: center;
     }
 
     .donation h2 {
-      font-size: 25px;
+      font-size: 21px;
       letter-spacing: 3px;
     }
 
     .donation p {
       color: #aaa49a;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.8;
     }
 
@@ -122,35 +121,17 @@
       border: 1px solid #b9a889;
       color: #b9a889;
       text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 2px;
-    }
-
-    footer {
-      padding: 30px 20px;
-      text-align: center;
-      border-top: 1px solid #29251f;
-      color: #777;
       font-size: 10px;
       letter-spacing: 2px;
     }
 
-    @media (max-width: 600px) {
-      header {
-        padding: 0 22px;
-      }
-
-      .edition {
-        font-size: 8px;
-      }
-
-      .hero {
-        min-height: 570px;
-      }
-
-      h1 {
-        letter-spacing: 3px;
-      }
+    footer {
+      padding: 30px 15px;
+      text-align: center;
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 2px;
+      border-top: 1px solid #29251f;
     }
   </style>
 </head>
@@ -163,57 +144,51 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div class="content">
+    <div class="content">
 
-        <div class="eyebrow">
-          30 PIEZAS. UNA OPORTUNIDAD.
-        </div>
-
-        <h1>NO ES PARA SIEMPRE.</h1>
-
-        <p class="description">
-          Cada día, una nueva selección.
-          Productos exclusivos, cantidades limitadas
-          y una oportunidad que no se repite.
-        </p>
-
-        <div class="status">
-          <span>●</span> TIENDA BLOQUEADA
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="units">
-          30 UNIDADES DISPONIBLES POR LANZAMIENTO
-        </div>
-
+      <div class="eyebrow">
+        30 PIEZAS. UNA OPORTUNIDAD.
       </div>
-    </section>
+
+      <h1>30 UNITS.<br>ONE DROP.</h1>
+
+      <p class="description">
+        Solo 30 unidades. Un lanzamiento diario.
+        Una oportunidad exclusiva que no se repite.
+      </p>
+
+      <div class="divider"></div>
+
+      <div class="status">
+        ● TIENDA BLOQUEADA
+      </div>
+
+      <div class="units">
+        EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.
+      </div>
+
+    </div>
   </main>
 
   <section class="donation">
     <h2>ALGO MÁS QUE COMPRAR.</h2>
 
     <p>
-      Mientras esperas el próximo lanzamiento,
-      puedes apoyar una causa benéfica.
+      Apoya a CENIT Ecuador y contribuye
+      a una causa benéfica.
     </p>
 
-   <a class="donate-button"
-   href="https://www.omprakash.org/global/cenit-ecuador/donate"
-   target="_blank"
-   rel="noopener noreferrer">
-      DONAR A UNA CAUSA BENÉFICA
+    <a
+      class="donate-button"
+      href="https://www.omprakash.org/global/cenit-ecuador/donate"
+      target="_blank"
+      rel="noopener noreferrer">
+      DONAR A CENIT ECUADOR
     </a>
-
-    <p id="donaciones">
-      Próximamente encontrarás aquí la causa que apoyamos.
-    </p>
   </section>
 
   <footer>
-    DROP 30 · UNA NUEVA OPORTUNIDAD CADA DÍA
+    DROP 30 · 30 UNITS. ONE DROP.
   </footer>
 
 </body>
