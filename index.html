@@ -5,403 +5,200 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#090909">
   <title>DROP 30</title>
-
   <style>
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: #090909;
-      color: #f5f1e9;
-      font-family: Arial, sans-serif;
-    }
-
-    header {
-      height: 90px;
-      padding: 0 8%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #29251f;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: bold;
-      letter-spacing: 6px;
-    }
-
-    .edition {
-      color: #b9a889;
-      font-size: 10px;
-      letter-spacing: 3px;
-    }
-
-    main {
-      min-height: 650px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 70px 20px;
-    }
-
-    .content {
-      max-width: 750px;
-    }
-
-    .eyebrow {
-      color: #b9a889;
-      font-size: 11px;
-      letter-spacing: 5px;
-    }
-
-    h1 {
-      font-size: clamp(45px, 9vw, 90px);
-      letter-spacing: 5px;
-      line-height: 1.1;
-      margin: 35px 0;
-    }
-
-    .description {
-      color: #aaa49a;
-      font-size: 15px;
-      line-height: 1.9;
-      max-width: 470px;
-      margin: auto;
-    }
-
-    .divider {
-      width: 55px;
-      height: 1px;
-      background: #b9a889;
-      margin: 40px auto;
-    }
-
-    .status {
-      display: inline-block;
-      border: 1px solid #514a3e;
-      padding: 14px 25px;
-      color: #b9a889;
-      font-size: 10px;
-      letter-spacing: 3px;
-    }
-
-    .units {
-      margin-top: 35px;
-      font-size: 12px;
-      letter-spacing: 3px;
-    }
-
-    /* Product section (hidden when locked) */
-    .product-section {
-      max-width: 650px;
-      margin: 60px auto;
-      padding: 40px;
-      border: 1px solid #29251f;
-      background: #100f0d;
-      text-align: center;
-      display: none;
-    }
-
-    .product-section.visible {
-      display: block;
-    }
-
-    .product-section h2 {
-      font-size: 28px;
-      letter-spacing: 3px;
-      margin-bottom: 10px;
-    }
-
-    .product-section .product-price {
-      font-size: 22px;
-      color: #b9a889;
-      letter-spacing: 2px;
-      margin: 15px 0;
-    }
-
-    .product-section p.description {
-      color: #aaa49a;
-      font-size: 14px;
-      line-height: 1.8;
-      margin: 20px 0;
-    }
-
-    .product-section .units {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: #aaa49a;
-    }
-
-    .buy-button {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 16px 30px;
-      border: 2px solid #b9a889;
-      color: #b9a889;
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 3px;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .buy-button:hover {
-      background: #b9a889;
-      color: #090909;
-    }
-
-    .donation {
-      background: #100f0d;
-      border-top: 1px solid #29251f;
-      padding: 65px 20px;
-      text-align: center;
-    }
-
-    .donation h2 {
-      font-size: 21px;
-      letter-spacing: 3px;
-    }
-
-    .donation p {
-      color: #aaa49a;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    .donate-button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 16px 25px;
-      border: 1px solid #b9a889;
-      color: #b9a889;
-      text-decoration: none;
-      font-size: 10px;
-      letter-spacing: 2px;
-    }
-
-    footer {
-      padding: 30px 15px;
-      text-align: center;
-      color: #777;
-      font-size: 10px;
-      letter-spacing: 2px;
-      border-top: 1px solid #29251f;
-    }
-
-    .order-confirmation {
-      max-width: 650px;
-      margin: 30px auto;
-      padding: 20px;
-      border: 1px solid #29251f;
-      background: #100f0d;
-      text-align: center;
-      display: none;
-    }
-
-    .order-confirmation.visible {
-      display: block;
-    }
-
-    .order-confirmation h2 {
-      color: #b9a889;
-      margin-bottom: 10px;
-    }
-
-    .order-confirmation .order-ref {
-      font-size: 14px;
-      color: #aaa49a;
-      letter-spacing: 2px;
-      margin: 5px 0;
-    }
-
-    .buy-error {
-      color: #ff6b6b;
-      font-size: 12px;
-      margin-top: 10px;
-      display: none;
-    }
-
-    .buy-error.visible {
-      display: block;
-    }
+    body { margin: 0; background: #090909; color: #f5f1e9; font-family: Arial, sans-serif; }
+    header { height: 90px; padding: 0 8%; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #29251f; }
+    .logo { font-size: 25px; font-weight: bold; letter-spacing: 6px; }
+    .edition { color: #b9a889; font-size: 10px; letter-spacing: 3px; }
+    main { min-height: 650px; display: flex; align-items: center; justify-content: center; padding: 70px 20px; }
+    .content { max-width: 750px; }
+    .eyebrow { color: #b9a889; font-size: 11px; letter-spacing: 5px; }
+    h1 { font-size: clamp(45px, 9vw, 90px); letter-spacing: 5px; line-height: 1.1; margin: 35px 0; }
+    .description { color: #aaa49a; font-size: 15px; line-height: 1.9; max-width: 470px; margin: auto; }
+    .divider { width: 55px; height: 1px; background: #b9a889; margin: 40px auto; }
+    .status { display: inline-block; border: 1px solid #514a3e; padding: 14px 25px; color: #b9a889; font-size: 10px; letter-spacing: 3px; }
+    .units { margin-top: 35px; font-size: 12px; letter-spacing: 3px; }
+    .donation { background: #100f0d; border-top: 1px solid #29251f; padding: 65px 20px; text-align: center; }
+    .donation h2 { font-size: 21px; letter-spacing: 3px; }
+    .donation p { color: #aaa49a; font-size: 13px; line-height: 1.8; }
+    .donate-button { display: inline-block; margin-top: 20px; padding: 16px 25px; border: 1px solid #b9a889; color: #b9a889; text-decoration: none; font-size: 10px; letter-spacing: 2px; }
+    footer { padding: 30px 15px; text-align: center; color: #777; font-size: 10px; letter-spacing: 2px; border-top: 1px solid #29251f; }
+    .buy-error { color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none; }
+    .buy-error.visible { display: block; }
+    @media (max-width: 600px) { .logo { font-size: 20px; } }
   </style>
 </head>
-
 <body>
-
   <header>
     <div class="logo">DROP 30</div>
     <div class="edition">EDICIÓN DIARIA</div>
   </header>
-
   <main>
     <div class="content">
-
-      <div class="eyebrow">
-        30 PIEZAS. UNA OPORTUNIDAD.
-      </div>
-
+      <div class="eyebrow">30 PIEZAS. UNA OPORTUNIDAD.</div>
       <h1>30 UNITS.<br>ONE DROP.</h1>
-
       <p class="description">
         Solo 30 unidades. Un lanzamiento diario.
         Una oportunidad exclusiva que no se repite.
       </p>
-
       <div class="divider"></div>
-
-      <div class="status">
-        ● TIENDA BLOQUEADA
+      <div class="status" id="store-status">● TIENDA BLOQUEADA</div>
+      <div class="units" id="store-units">EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.</div>
+      <div class="product-section" id="product-section" style="display:none;">
+        <img class="product-img" id="product-img" src="" alt="Producto" style="max-width:200px; max-height:200px; object-fit:cover; border:2px solid #b9a889; border-radius:4px; margin-bottom:15px;">
+        <h2 class="product-name" id="product-name" style="font-size:22px; letter-spacing:2px; margin-bottom:10px;"></h2>
+        <div class="product-price" id="product-price" style="font-size:22px; color:#b9a889; letter-spacing:2px; margin-bottom:15px;"></div>
+        <p class="product-desc" id="product-desc" style="color:#aaa49a; font-size:14px; line-height:1.8; margin-bottom:15px;"></p>
+        <div class="units" id="product-remaining" style="font-size:11px; letter-spacing:2px; color:#aaa49a;"></div>
+        <div class="payment-methods" style="max-width:650px; margin:30px auto; padding:20px; border:1px solid #29251f; background:#100f0d; text-align:center;">
+          <h3>MÉTODOS DE PAGO</h3>
+          <div class="payment-method" style="display:inline-block; margin:10px; padding:15px; border:1px solid #29251f; background:#090909; cursor:pointer;">
+            <img src="https://via.placeholder.com/150x150?text=QR+Deuna" alt="Deuna QR" style="max-width:150px; border:2px solid #29251f; border-radius:4px;">
+            <p style="color:#aaa49a; font-size:10px; margin-top:5px; letter-spacing:1px;">Escanee con la app Deuna</p>
+          </div>
+          <div id="mercadopago-container" style="display:inline-block; margin:10px;"></div>
+        </div>
+        <button class="buy-button" id="buy-button" style="display:none;">COMPRAR AHORA</button>
+        <div class="buy-error" id="buy-error"></div>
+        <div class="order-confirmation" id="order-confirmation" style="margin-top:20px; color:#b9a889; font-size:14px; display:none;"></div>
       </div>
-
-      <div class="units">
-        EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.
-      </div>
-
     </div>
   </main>
-
-  <!-- Product section (hidden when locked) -->
-  <div class="product-section" id="product-section">
-    <img class="product-img" id="product-img" src="" alt="Producto">
-    <h2 class="product-name" id="product-name"></h2>
-    <div class="product-price" id="product-price"></div>
-    <p class="product-desc" id="product-desc"></p>
-    <button class="buy-button" id="buy-button">COMPRAR AHORA</button>
-    <div class="order-confirmation" id="order-confirmation"></div>
-  </div>
-
-  <!-- Donation section (always visible) -->
   <section class="donation">
     <h2>ALGO MÁS QUE COMPRAR.</h2>
-    <p>
-      Apoya a CENIT Ecuador y contribuye
-      a una causa benéfica.
-    </p>
-    <a
-      class="donate-button"
-      href="https://www.omprakash.org/global/cenit-ecuador/donate"
-      target="_blank"
-      rel="noopener noreferrer">
-      DONAR A CENIT ECUADOR
-    </a>
+    <p>Apoya a CENIT Ecuador y contribuye a una causa benéfica.</p>
+    <a class="donate-button" href="https://www.omprakash.org/global/cenit-ecuador/donate" target="_blank" rel="noopener noreferrer">DONAR A CENIT ECUADOR</a>
   </section>
+  <footer>DROP 30 · 30 UNITS. ONE DROP.</footer>
+  <script>
+    const API_URL = "https://drop-30-api3.leonsp410.workers.dev/status";
+    const PRODUCT_URL = "https://drop-30-api3.leonsp410.workers.dev/product";
+    const CHECKOUT_URL = "https://drop-30-api3.leonsp410.workers.dev/checkout";
+    const PRODUCTS_URL = "https://drop-30-api3.leonsp410.workers.dev/products";
 
-  <footer>
-    DROP 30 · 30 UNITS. ONE DROP.
-  </footer>
+    let currentProduct = null;
+    let mp = null;
 
-
-<script>
-// ── Configuration ────────────────────────────────────────────────
-const API_URL = "https://drop-30-api3.leonsp410.workers.dev/status";
-const PRODUCT_URL = "https://drop-30-api3.leonsp410.workers.dev/product";
-const CHECKOUT_URL = "https://drop-30-api3.leonsp410.workers.dev/checkout";
-
-// ── State ────────────────────────────────────────────────────────
-let currentProduct = null;
-let remainingUnits = 30;
-let isProductLoaded = false;
-let isCheckingOut = false;
-
-// ── Initialize ───────────────────────────────────────────────────
-async function init() {
-  await loadStoreStatus();
-}
-
-// ── Load store status ────────────────────────────────────────────
-async function loadStoreStatus() {
-  try {
-    const response = await fetch(API_URL, { cache: "no-store" });
-    const data = await response.json();
-
-    const statusEl = document.getElementById("store-status");
-    const unitsEl = document.getElementById("store-units");
-    const productSection = document.getElementById("product-section");
-
-    if (data.unlocked) {
-      statusEl.textContent = "● TIENDA ABIERTA";
-      unitsEl.textContent = "EL LANZAMIENTO DE HOY ESTÁ DISPONIBLE.";
-      productSection.classList.add("visible");
-      await loadProduct();
-    } else {
-      statusEl.textContent = "● TIENDA BLOQUEADA";
-      unitsEl.textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
-      productSection.classList.remove("visible");
+    async function init() {
+      await loadStoreStatus();
+      initMercadoPago();
     }
-  } catch (error) {
-    console.error("Error loading store status:", error);
-  }
-}
 
-// ── Load product ─────────────────────────────────────────────────
-async function loadProduct() {
-  try {
-    const response = await fetch(PRODUCT_URL, { cache: "no-store" });
-    if (!response.ok) {
-      const error = await response.json();
-      if (error.error === "Tienda bloqueada") {
-        document.getElementById("store-status").textContent = "● TIENDA BLOQUEADA";
-        document.getElementById("store-units").textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
-        document.getElementById("product-section").classList.remove("visible");
-        return;
+    async function loadStoreStatus() {
+      try {
+        const response = await fetch(API_URL, { cache: "no-store" });
+        const data = await response.json();
+
+        const statusEl = document.getElementById("store-status");
+        const unitsEl = document.getElementById("store-units");
+        const productSection = document.getElementById("product-section");
+
+        if (data.unlocked) {
+          statusEl.textContent = "● TIENDA ABIERTA";
+          unitsEl.textContent = "EL LANZAMIENTO DE HOY ESTÁ DISPONIBLE.";
+          productSection.style.display = "block";
+          await loadProduct();
+        } else {
+          statusEl.textContent = "● TIENDA BLOQUEADA";
+          unitsEl.textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
+          productSection.style.display = "none";
+        }
+      } catch (error) { console.error(error); }
+    }
+
+    async function loadProduct() {
+      try {
+        const response = await fetch(PRODUCT_URL, { cache: "no-store" });
+        if (!response.ok) {
+          const error = await response.json();
+          if (error.error === "Tienda bloqueada") {
+            document.getElementById("store-status").textContent = "● TIENDA BLOQUEADA";
+            document.getElementById("store-units").textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
+            document.getElementById("product-section").style.display = "none";
+            return;
+          }
+          throw new Error(error.message || "Error al cargar producto");
+        }
+        const data = await response.json();
+
+        currentProduct = data.product;
+        document.getElementById("product-img").src = data.product.imageUrl || "https://via.placeholder.com/200x200?text=Producto";
+        document.getElementById("product-name").textContent = data.product.name;
+        document.getElementById("product-price").textContent = "U$" + data.product.price;
+        document.getElementById("product-desc").textContent = data.product.description || "Sin descripción disponible.";
+        document.getElementById("product-remaining").textContent = data.remaining > 1 ? data.remaining + " unidades disponibles" : data.remaining + " disponible";
+      } catch (error) { console.error(error); }
+    }
+
+    function initMercadoPago() {
+      // Initialize Mercado Pago SDK
+      const mp = new MercadoPago("TEST_TOKEN_AQUI", {
+        locale: "es-EC",
+        businessId: "DROP-30"
+      });
+    }
+
+    document.getElementById("buy-button").addEventListener("click", async function() {
+      const email = prompt("Ingrese su email para recibir los detalles:") || "";
+      if (!email) return;
+      try {
+        const response = await fetch(CHECKOUT_URL, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            productId: currentProduct ? currentProduct.productId : "test",
+            quantity: 1,
+            email: email,
+          }),
+        });
+        const data = await response.json();
+        if (data.success) {
+          document.getElementById("buy-button").style.display = "none";
+          document.getElementById("order-confirmation").textContent = "✅ " + data.message;
+          document.getElementById("order-confirmation").style.display = "block";
+        } else {
+          alert(data.message || "Error al procesar la compra");
+        }
+      } catch (error) {
+        alert("Error de conexión: " + error.message);
       }
-      throw new Error(error.message || "Error al cargar producto");
-    }
-    const data = await response.json();
-
-    document.getElementById("product-img").src = data.product.imageUrl || "https://via.placeholder.com/200x200?text=Producto";
-    document.getElementById("product-name").textContent = data.product.name;
-    document.getElementById("product-price").textContent = "U$" + data.product.price;
-    document.getElementById("product-desc").textContent = data.product.description || "Sin descripción disponible.";
-  } catch (error) {
-    console.error("Error loading product:", error);
-  }
-}
-
-// ── Buy now ──────────────────────────────────────────────────────
-document.getElementById("buy-button").addEventListener("click", async function() {
-  const email = prompt("Ingrese su email para recibir los detalles:") || "";
-  if (!email) return;
-
-  try {
-    const response = await fetch(CHECKOUT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        productId: "test-product",
-        quantity: 1,
-        email: email,
-      }),
     });
 
-    const data = await response.json();
+    // Mercado Pago payment button
+    document.getElementById("mercadopago-container").addEventListener("click", async function() {
+      if (!currentProduct) return;
+      try {
+        const response = await fetch(PRODUCTS_URL, { cache: "no-store" });
+        const data = await response.json();
+        const product = data.products?.[0];
+        if (product) {
+          // Load Mercado Pago SDK and create payment button
+          const mp = new MercadoPago("TEST_TOKEN_AQUI", { locale: "es-EC" });
+          const button = mp.getPaymentBadge({
+            amount: product.price,
+            paymentMethodId: "master",
+            transactionAmount: product.price,
+            description: product.name,
+            color: "#b9a889",
+            textColor: "#f5f1e9",
+            label: "Pagar con Mercado Pago",
+            wallet: "master",
+          });
+          document.getElementById("mercadopago-container").innerHTML = button;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
 
-    if (data.success) {
-      document.getElementById("buy-button").style.display = "none";
-      document.getElementById("order-confirmation").textContent = "✅ " + data.message;
-      document.getElementById("order-confirmation").classList.add("visible");
-    } else {
-      alert(data.message || "Error al procesar la compra");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Error de conexión");
-  }
-});
+    setInterval(() => {
+      if (document.getElementById("product-section").style.display === "block") {
+        loadStoreStatus();
+      }
+    }, 30000);
 
-// ── Poll status every 30 seconds ────────────────────────────────
-setInterval(() => {
-  if (isProductLoaded) {
-    loadStoreStatus();
-  }
-}, 30000);
-
-// ── Run ──────────────────────────────────────────────────────────
-init();
-</script>
-
+    init();
+  </script>
 </body>
 </html>

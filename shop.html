@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090909">
+  <title>Shop — DROP 30</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #090909; color: #f5f1e9; font-family: Arial, sans-serif; }
+    header { height: 90px; padding: 0 8%; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #29251f; }
+    .logo { font-size: 25px; font-weight: bold; letter-spacing: 6px; }
+    .edition { color: #b9a889; font-size: 10px; letter-spacing: 3px; }
+    main { min-height: 650px; display: flex; align-items: center; justify-content: center; padding: 70px 20px; }
+    .content { max-width: 900px; }
+    .eyebrow { color: #b9a889; font-size: 11px; letter-spacing: 5px; }
+    h1 { font-size: clamp(45px, 9vw, 90px); letter-spacing: 5px; line-height: 1.1; margin: 35px 0; }
+    .description { color: #aaa49a; font-size: 15px; line-height: 1.9; max-width: 470px; margin: auto; }
+    .divider { width: 55px; height: 1px; background: #b9a889; margin: 40px auto; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px 0; }
+    .product-card { background: #100f0d; border: 1px solid #29251f; border-radius: 4px; padding: 30px; text-align: center; transition: transform 0.2s; }
+    .product-card:hover { transform: translateY(-2px); border-color: #b9a889; }
+    .product-img { max-width: 200px; max-height: 200px; object-fit: cover; border: 2px solid #29251f; border-radius: 4px; margin-bottom: 15px; }
+    .product-name { font-size: 22px; letter-spacing: 2px; margin-bottom: 10px; }
+    .product-price { font-size: 22px; color: #b9a889; letter-spacing: 2px; margin-bottom: 15px; }
+    .buy-button { display: inline-block; padding: 16px 30px; border: 2px solid #b9a889; color: #b9a889; text-decoration: none; font-size: 12px; letter-spacing: 2px; cursor: pointer; border-radius: 2px; }
+    .buy-button:hover { background: #b9a889; color: #090909; }
+    .donation { background: #100f0d; border-top: 1px solid #29251f; padding: 65px 20px; text-align: center; }
+    .donation h2 { font-size: 21px; letter-spacing: 3px; }
+    .donation p { color: #aaa49a; font-size: 13px; line-height: 1.8; }
+    .donate-button { display: inline-block; margin-top: 20px; padding: 16px 25px; border: 1px solid #b9a889; color: #b9a889; text-decoration: none; font-size: 10px; letter-spacing: 2px; }
+    footer { padding: 30px 15px; text-align: center; color: #777; font-size: 10px; letter-spacing: 2px; border-top: 1px solid #29251f; }
+    .error { color: #ff6b6b; font-size: 14px; margin-top: 10px; display: none; }
+    .error.visible { display: block; }
+    @media (max-width: 600px) { .product-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">DROP 30</div>
+    <div class="edition">EDICIÓN DIARIA</div>
+  </header>
+  <main>
+    <div class="content">
+      <div class="eyebrow">30 PIEZAS. UNA OPORTUNIDAD.</div>
+      <h1>Tienda del Día</h1>
+      <p class="description">
+        Una oportunidad exclusiva diaria. Solo 30 unidades disponibles.
+      </p>
+      <div class="divider"></div>
+      <div class="product-grid" id="product-grid">
+        <div class="product-card">
+          <div class="product-img"></div>
+          <h2 class="product-name">Cargando...</h2>
+          <div class="product-price">—</div>
+          <button class="buy-button" onclick="buyProduct()">COMPRAR</button>
+        </div>
+      </div>
+      <div class="error" id="error"></div>
+    </div>
+  </main>
+  <section class="donation">
+    <h2>ALGO MÁS QUE COMPRAR.</h2>
+    <p>Apoya a CENIT Ecuador y contribuye a una causa benéfica.</p>
+    <a class="donate-button" href="https://www.omprakash.org/global/cenit-ecuador/donate" target="_blank" rel="noopener noreferrer">DONAR A CENIT ECUADOR</a>
+  </section>
+  <footer>DROP 30 · 30 UNITS. ONE DROP.</footer>
+  <script>
+    const API_URL = "https://drop-30-api3.leonsp410.workers.dev/products";
+
+    async function loadProducts() {
+      try {
+        const response = await fetch(API_URL, { cache: "no-store" });
+        const data = await response.json();
+        if (!data.products || data.products.length === 0) {
+          document.querySelector(".product-grid").innerHTML = '<div class="description" style="text-align:center; color:#aaa49a; max-width:470px; margin:auto;">Aún no hay productos disponibles. ¡Vuelve pronto!</div>';
+          return;
+        }
+        const grid = document.getElementById("product-grid");
+        grid.innerHTML = data.products.map(product => `
+          <div class="product-card">
+            <img class="product-img" src="${product.imageUrl}" alt="${product.name}">
+            <h2 class="product-name">${product.name}</h2>
+            <div class="product-price">U$D ${product.price}</div>
+            <button class="buy-button" onclick="buyProduct('${product.productId}')">COMPRAR AHORA</button>
+          </div>
+        `).join('');
+      } catch (error) {
+        document.getElementById("error").textContent = "Error al cargar productos: " + error.message;
+        document.getElementById("error").classList.add("visible");
+      }
+    }
+
+    async function buyProduct(productId) {
+      const productName = productId;
+      const email = prompt("Ingrese su email para recibir los detalles:") || "";
+      if (!email) return;
+      if (!productId) return;
+
+      try {
+        const response = await fetch("https://drop-30-api3.leonsp410.workers.dev/checkout", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            productId: productId,
+            quantity: 1,
+            email: email,
+          }),
+        });
+        const data = await response.json();
+        if (data.success) {
+          alert("¡Pedido realizado! \n\nOrder Ref: " + data.orderRef + "\n\nTe enviaremos los detalles por email.");
+          location.reload();
+        } else {
+          alert(data.message || "Error al procesar la compra");
+        }
+      } catch (error) {
+        alert("Error de conexión: " + error.message);
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", loadProducts);
+    } else {
+      loadProducts();
+    }
+  </script>
+</body>
+</html>
