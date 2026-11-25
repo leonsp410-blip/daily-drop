@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Drop</title>
+  <meta name="theme-color" content="#090909">
+  <title>DROP 30 — Una oportunidad diaria</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -12,88 +14,204 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
       background: #090909;
       color: #f5f1e9;
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
     }
 
     header {
-      padding: 28px 7%;
-      border-bottom: 1px solid #292929;
-      letter-spacing: 5px;
-      font-size: 19px;
-    }
-
-    main {
-      flex: 1;
+      height: 85px;
+      padding: 0 8%;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #29251f;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+      letter-spacing: 5px;
+    }
+
+    .edition {
+      color: #b9a889;
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+
+    .hero {
+      min-height: 650px;
+      display: flex;
       justify-content: center;
+      align-items: center;
       text-align: center;
-      padding: 50px 20px;
+      padding: 90px 20px;
     }
 
     .content {
-      max-width: 550px;
+      max-width: 650px;
     }
 
     .eyebrow {
-      color: #a99b82;
-      letter-spacing: 4px;
+      color: #b9a889;
       font-size: 11px;
+      letter-spacing: 5px;
     }
 
     h1 {
-      font-size: clamp(38px, 8vw, 68px);
-      letter-spacing: 5px;
-      margin: 24px 0;
+      font-size: clamp(55px, 10vw, 100px);
+      letter-spacing: 7px;
+      margin: 35px 0 20px;
+      line-height: 1;
     }
 
-    p {
+    .description {
       color: #aaa49a;
+      line-height: 1.9;
+      font-size: 15px;
+      max-width: 480px;
+      margin: 25px auto;
+    }
+
+    .status {
+      display: inline-block;
+      border: 1px solid #514a3e;
+      padding: 13px 22px;
+      color: #b9a889;
+      font-size: 10px;
+      letter-spacing: 3px;
+      margin-top: 20px;
+    }
+
+    .divider {
+      width: 55px;
+      height: 1px;
+      background: #b9a889;
+      margin: 35px auto;
+    }
+
+    .units {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: #f5f1e9;
+    }
+
+    .donation {
+      padding: 85px 20px;
+      text-align: center;
+      background: #100f0d;
+      border-top: 1px solid #29251f;
+    }
+
+    .donation h2 {
+      font-size: 25px;
+      letter-spacing: 3px;
+    }
+
+    .donation p {
+      color: #aaa49a;
+      font-size: 14px;
       line-height: 1.8;
     }
 
-    .button {
+    .donate-button {
       display: inline-block;
-      margin-top: 28px;
-      padding: 15px 28px;
+      margin-top: 20px;
+      padding: 16px 25px;
       border: 1px solid #b9a889;
-      color: #f5f1e9;
+      color: #b9a889;
       text-decoration: none;
+      font-size: 11px;
       letter-spacing: 2px;
-      font-size: 12px;
     }
 
     footer {
+      padding: 30px 20px;
       text-align: center;
-      padding: 25px;
-      border-top: 1px solid #292929;
+      border-top: 1px solid #29251f;
       color: #777;
-      font-size: 11px;
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 0 22px;
+      }
+
+      .edition {
+        font-size: 8px;
+      }
+
+      .hero {
+        min-height: 570px;
+      }
+
+      h1 {
+        letter-spacing: 3px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header>DAILY DROP</header>
+
+  <header>
+    <div class="logo">DROP 30</div>
+    <div class="edition">EDICIÓN DIARIA</div>
+  </header>
 
   <main>
-    <div class="content">
-      <div class="eyebrow">UNA NUEVA EXPERIENCIA CADA DÍA</div>
-      <h1>ALGO NUEVO<br>TE ESPERA.</h1>
-      <p>
-        Cada día, una nueva oportunidad.
-        Una selección exclusiva, disponible en cantidades limitadas.
-      </p>
-      <a class="button" href="#" onclick="return false;">
-        PRÓXIMAMENTE
-      </a>
-    </div>
+    <section class="hero">
+      <div class="content">
+
+        <div class="eyebrow">
+          30 PIEZAS. UNA OPORTUNIDAD.
+        </div>
+
+        <h1>NO ES PARA SIEMPRE.</h1>
+
+        <p class="description">
+          Cada día, una nueva selección.
+          Productos exclusivos, cantidades limitadas
+          y una oportunidad que no se repite.
+        </p>
+
+        <div class="status">
+          <span>●</span> TIENDA BLOQUEADA
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="units">
+          30 UNIDADES DISPONIBLES POR LANZAMIENTO
+        </div>
+
+      </div>
+    </section>
   </main>
 
-  <footer>© 2026 DAILY DROP</footer>
+  <section class="donation">
+    <h2>ALGO MÁS QUE COMPRAR.</h2>
+
+    <p>
+      Mientras esperas el próximo lanzamiento,
+      puedes apoyar una causa benéfica.
+    </p>
+
+    <a class="donate-button" href="#donaciones">
+      DONAR A UNA CAUSA BENÉFICA
+    </a>
+
+    <p id="donaciones">
+      Próximamente encontrarás aquí la causa que apoyamos.
+    </p>
+  </section>
+
+  <footer>
+    DROP 30 · UNA NUEVA OPORTUNIDAD CADA DÍA
+  </footer>
+
 </body>
 </html>
