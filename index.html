@@ -7,9 +7,7 @@
   <title>DROP 30</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -218,15 +216,6 @@
       margin: 5px 0;
     }
 
-    .close-note {
-      max-width: 650px;
-      margin: 20px auto;
-      padding: 15px;
-      font-size: 12px;
-      color: #aaa49a;
-      text-align: center;
-    }
-
     .buy-error {
       color: #ff6b6b;
       font-size: 12px;
@@ -275,21 +264,13 @@
   </main>
 
   <!-- Product section (hidden when locked) -->
-  <div class="product-section" id="productSection">
-    <h2></h2>
-    <p class="description"></p>
-    <p class="product-price"></p>
-    <div class="units" id="stockDisplay"></div>
-    <button class="buy-button" onclick="buyNow()">COMPRAR AHORA</button>
-    <div class="buy-error" id="buyError"></div>
-  </div>
-
-  <!-- Order confirmation -->
-  <div class="order-confirmation" id="orderConfirmation">
-    <h2>¡Gracias por tu compra!</h2>
-    <p class="order-ref"></p>
-    <p class="description">Te enviaremos un correo con los detalles de tu pedido.</p>
-    <button class="buy-button" onclick="location.reload()">SEGURO PA' MIPUESTRO</button>
+  <div class="product-section" id="product-section">
+    <img class="product-img" id="product-img" src="" alt="Producto">
+    <h2 class="product-name" id="product-name"></h2>
+    <div class="product-price" id="product-price"></div>
+    <p class="product-desc" id="product-desc"></p>
+    <button class="buy-button" id="buy-button">COMPRAR AHORA</button>
+    <div class="order-confirmation" id="order-confirmation"></div>
   </div>
 
   <!-- Donation section (always visible) -->
@@ -315,10 +296,9 @@
 
 <script>
 // ── Configuration ────────────────────────────────────────────────
-const API_URL = "https://drop-30-api3.leonsp410.workers.dev";
-const PRODUCT_API = API_URL + "/product";
-const CHECKOUT_API = API_URL + "/checkout";
-const STATUS_API = API_URL + "/status";
+const API_URL = "https://drop-30-api3.leonsp410.workers.dev/status";
+const PRODUCT_URL = "https://drop-30-api3.leonsp410.workers.dev/product";
+const CHECKOUT_URL = "https://drop-30-api3.leonsp410.workers.dev/checkout";
 
 // ── State ────────────────────────────────────────────────────────
 let currentProduct = null;
@@ -334,19 +314,22 @@ async function init() {
 // ── Load store status ────────────────────────────────────────────
 async function loadStoreStatus() {
   try {
-    const response = await fetch(STATUS_API, { cache: "no-store" });
+    const response = await fetch(API_URL, { cache: "no-store" });
     const data = await response.json();
 
-    const statusEl = document.querySelector(".status");
-    const unitsEl = document.querySelector(".units");
+    const statusEl = document.getElementById("store-status");
+    const unitsEl = document.getElementById("store-units");
+    const productSection = document.getElementById("product-section");
 
     if (data.unlocked) {
       statusEl.textContent = "● TIENDA ABIERTA";
       unitsEl.textContent = "EL LANZAMIENTO DE HOY ESTÁ DISPONIBLE.";
+      productSection.classList.add("visible");
       await loadProduct();
     } else {
       statusEl.textContent = "● TIENDA BLOQUEADA";
       unitsEl.textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
+      productSection.classList.remove("visible");
     }
   } catch (error) {
     console.error("Error loading store status:", error);
@@ -356,109 +339,60 @@ async function loadStoreStatus() {
 // ── Load product ─────────────────────────────────────────────────
 async function loadProduct() {
   try {
-    const response = await fetch(PRODUCT_API, { cache: "no-store" });
+    const response = await fetch(PRODUCT_URL, { cache: "no-store" });
+    if (!response.ok) {
+      const error = await response.json();
+      if (error.error === "Tienda bloqueada") {
+        document.getElementById("store-status").textContent = "● TIENDA BLOQUEADA";
+        document.getElementById("store-units").textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
+        document.getElementById("product-section").classList.remove("visible");
+        return;
+      }
+      throw new Error(error.message || "Error al cargar producto");
+    }
     const data = await response.json();
 
-    if (response.ok && data.product) {
-      currentProduct = data.product;
-      remainingUnits = data.remaining || 30;
-
-      // Show product section
-      const productSection = document.getElementById("productSection");
-      const orderConfirmation = document.getElementById("orderConfirmation");
-      productSection.classList.add("visible");
-      orderConfirmation.classList.remove("visible");
-
-      // Populate product details
-      document.querySelector(".product-section h2").textContent = currentProduct.name;
-      document.querySelector(".product-section .description").textContent =
-        currentProduct.description || "Sin descripción disponible.";
-      document.querySelector(".product-section .product-price").textContent =
-        "USD " + currentProduct.price;
-
-      if (remainingUnits > 1) {
-        document.getElementById("stockDisplay").textContent =
-          `${remainingUnits} unidades disponibles`;
-      } else if (remainingUnits === 1) {
-        document.getElementById("stockDisplay").textContent =
-          "1 unidad disponible";
-      } else {
-        document.getElementById("stockDisplay").textContent =
-          "¡Agotado!";
-        document.querySelector(".buy-button").style.display = "none";
-      }
-
-      isProductLoaded = true;
-    } else {
-      // Store is closed
-      const productSection = document.getElementById("productSection");
-      const orderConfirmation = document.getElementById("orderConfirmation");
-      productSection.classList.remove("visible");
-      orderConfirmation.classList.remove("visible");
-    }
+    document.getElementById("product-img").src = data.product.imageUrl || "https://via.placeholder.com/200x200?text=Producto";
+    document.getElementById("product-name").textContent = data.product.name;
+    document.getElementById("product-price").textContent = "U$" + data.product.price;
+    document.getElementById("product-desc").textContent = data.product.description || "Sin descripción disponible.";
   } catch (error) {
     console.error("Error loading product:", error);
   }
 }
 
 // ── Buy now ──────────────────────────────────────────────────────
-async function buyNow() {
-  if (isCheckingOut || !isProductLoaded) return;
-
-  const email = prompt("Ingresa tu correo electrónico para el pedido:");
-
-  if (!email) {
-    alert("No se pudo enviar el pedido.");
-    return;
-  }
-
-  const productId = currentProduct ? currentProduct.productId : "test-product";
-  const quantity = 1;
-
-  isCheckingOut = true;
-  const buyButton = document.querySelector(".buy-button");
-  const buyError = document.getElementById("buyError");
-  buyButton.disabled = true;
-  buyButton.textContent = "PROCESANDO...";
-  buyError.classList.remove("visible");
+document.getElementById("buy-button").addEventListener("click", async function() {
+  const email = prompt("Ingrese su email para recibir los detalles:") || "";
+  if (!email) return;
 
   try {
-    const response = await fetch(CHECKOUT_API, {
+    const response = await fetch(CHECKOUT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        productId: productId,
-        quantity: quantity,
+        productId: "test-product",
+        quantity: 1,
         email: email,
       }),
     });
 
     const data = await response.json();
 
-    if (response.ok && data.success) {
-      // Show confirmation
-      const orderConfirmation = document.getElementById("orderConfirmation");
-      orderConfirmation.classList.add("visible");
-      document.querySelector(".order-confirmation .order-ref").textContent =
-        "Pedido: " + data.orderRef;
-
-      // Hide buy button options
-      document.querySelector(".product-section").classList.remove("visible");
+    if (data.success) {
+      document.getElementById("buy-button").style.display = "none";
+      document.getElementById("order-confirmation").textContent = "✅ " + data.message;
+      document.getElementById("order-confirmation").classList.add("visible");
     } else {
-      document.getElementById("buyError").textContent = data.message || "Error en el pedido.";
-      buyError.classList.add("visible");
+      alert(data.message || "Error al procesar la compra");
     }
   } catch (error) {
-    document.getElementById("buyError").textContent = "No se pudo conectar con el servidor.";
-    buyError.classList.add("visible");
-  } finally {
-    isCheckingOut = false;
-    buyButton.disabled = false;
-    buyButton.textContent = "COMPRAR AHORA";
+    console.error("Error:", error);
+    alert("Error de conexión");
   }
-}
+});
 
-// ── Poll status every 30 seconds (existing functionality) ────────
+// ── Poll status every 30 seconds ────────────────────────────────
 setInterval(() => {
   if (isProductLoaded) {
     loadStoreStatus();
