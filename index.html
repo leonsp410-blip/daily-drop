@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -96,6 +95,65 @@
       letter-spacing: 3px;
     }
 
+    /* Product section (hidden when locked) */
+    .product-section {
+      max-width: 650px;
+      margin: 60px auto;
+      padding: 40px;
+      border: 1px solid #29251f;
+      background: #100f0d;
+      text-align: center;
+      display: none;
+    }
+
+    .product-section.visible {
+      display: block;
+    }
+
+    .product-section h2 {
+      font-size: 28px;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .product-section .product-price {
+      font-size: 22px;
+      color: #b9a889;
+      letter-spacing: 2px;
+      margin: 15px 0;
+    }
+
+    .product-section p.description {
+      color: #aaa49a;
+      font-size: 14px;
+      line-height: 1.8;
+      margin: 20px 0;
+    }
+
+    .product-section .units {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #aaa49a;
+    }
+
+    .buy-button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 16px 30px;
+      border: 2px solid #b9a889;
+      color: #b9a889;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .buy-button:hover {
+      background: #b9a889;
+      color: #090909;
+    }
+
     .donation {
       background: #100f0d;
       border-top: 1px solid #29251f;
@@ -132,6 +190,52 @@
       font-size: 10px;
       letter-spacing: 2px;
       border-top: 1px solid #29251f;
+    }
+
+    .order-confirmation {
+      max-width: 650px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #29251f;
+      background: #100f0d;
+      text-align: center;
+      display: none;
+    }
+
+    .order-confirmation.visible {
+      display: block;
+    }
+
+    .order-confirmation h2 {
+      color: #b9a889;
+      margin-bottom: 10px;
+    }
+
+    .order-confirmation .order-ref {
+      font-size: 14px;
+      color: #aaa49a;
+      letter-spacing: 2px;
+      margin: 5px 0;
+    }
+
+    .close-note {
+      max-width: 650px;
+      margin: 20px auto;
+      padding: 15px;
+      font-size: 12px;
+      color: #aaa49a;
+      text-align: center;
+    }
+
+    .buy-error {
+      color: #ff6b6b;
+      font-size: 12px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .buy-error.visible {
+      display: block;
     }
   </style>
 </head>
@@ -170,14 +274,31 @@
     </div>
   </main>
 
+  <!-- Product section (hidden when locked) -->
+  <div class="product-section" id="productSection">
+    <h2></h2>
+    <p class="description"></p>
+    <p class="product-price"></p>
+    <div class="units" id="stockDisplay"></div>
+    <button class="buy-button" onclick="buyNow()">COMPRAR AHORA</button>
+    <div class="buy-error" id="buyError"></div>
+  </div>
+
+  <!-- Order confirmation -->
+  <div class="order-confirmation" id="orderConfirmation">
+    <h2>¡Gracias por tu compra!</h2>
+    <p class="order-ref"></p>
+    <p class="description">Te enviaremos un correo con los detalles de tu pedido.</p>
+    <button class="buy-button" onclick="location.reload()">SEGURO PA' MIPUESTRO</button>
+  </div>
+
+  <!-- Donation section (always visible) -->
   <section class="donation">
     <h2>ALGO MÁS QUE COMPRAR.</h2>
-
     <p>
       Apoya a CENIT Ecuador y contribuye
       a una causa benéfica.
     </p>
-
     <a
       class="donate-button"
       href="https://www.omprakash.org/global/cenit-ecuador/donate"
@@ -193,35 +314,160 @@
 
 
 <script>
-const API_URL = "https://drop-30-api3.leonsp410.workers.dev/status";
+// ── Configuration ────────────────────────────────────────────────
+const API_URL = "https://drop-30-api3.leonsp410.workers.dev";
+const PRODUCT_API = API_URL + "/product";
+const CHECKOUT_API = API_URL + "/checkout";
+const STATUS_API = API_URL + "/status";
 
-async function checkStoreStatus() {
+// ── State ────────────────────────────────────────────────────────
+let currentProduct = null;
+let remainingUnits = 30;
+let isProductLoaded = false;
+let isCheckingOut = false;
+
+// ── Initialize ───────────────────────────────────────────────────
+async function init() {
+  await loadStoreStatus();
+}
+
+// ── Load store status ────────────────────────────────────────────
+async function loadStoreStatus() {
   try {
-    const response = await fetch(API_URL, { cache: "no-store" });
-
-    if (!response.ok) {
-      throw new Error("No se pudo consultar la tienda");
-    }
-
+    const response = await fetch(STATUS_API, { cache: "no-store" });
     const data = await response.json();
 
-    const status = document.querySelector(".status");
-    const units = document.querySelector(".units");
+    const statusEl = document.querySelector(".status");
+    const unitsEl = document.querySelector(".units");
 
     if (data.unlocked) {
-      status.textContent = "● TIENDA ABIERTA";
-      units.textContent = "EL LANZAMIENTO DE HOY ESTÁ DISPONIBLE.";
+      statusEl.textContent = "● TIENDA ABIERTA";
+      unitsEl.textContent = "EL LANZAMIENTO DE HOY ESTÁ DISPONIBLE.";
+      await loadProduct();
     } else {
-      status.textContent = "● TIENDA BLOQUEADA";
-      units.textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
+      statusEl.textContent = "● TIENDA BLOQUEADA";
+      unitsEl.textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error loading store status:", error);
   }
 }
 
-checkStoreStatus();
-setInterval(checkStoreStatus, 30000);
+// ── Load product ─────────────────────────────────────────────────
+async function loadProduct() {
+  try {
+    const response = await fetch(PRODUCT_API, { cache: "no-store" });
+    const data = await response.json();
+
+    if (response.ok && data.product) {
+      currentProduct = data.product;
+      remainingUnits = data.remaining || 30;
+
+      // Show product section
+      const productSection = document.getElementById("productSection");
+      const orderConfirmation = document.getElementById("orderConfirmation");
+      productSection.classList.add("visible");
+      orderConfirmation.classList.remove("visible");
+
+      // Populate product details
+      document.querySelector(".product-section h2").textContent = currentProduct.name;
+      document.querySelector(".product-section .description").textContent =
+        currentProduct.description || "Sin descripción disponible.";
+      document.querySelector(".product-section .product-price").textContent =
+        "USD " + currentProduct.price;
+
+      if (remainingUnits > 1) {
+        document.getElementById("stockDisplay").textContent =
+          `${remainingUnits} unidades disponibles`;
+      } else if (remainingUnits === 1) {
+        document.getElementById("stockDisplay").textContent =
+          "1 unidad disponible";
+      } else {
+        document.getElementById("stockDisplay").textContent =
+          "¡Agotado!";
+        document.querySelector(".buy-button").style.display = "none";
+      }
+
+      isProductLoaded = true;
+    } else {
+      // Store is closed
+      const productSection = document.getElementById("productSection");
+      const orderConfirmation = document.getElementById("orderConfirmation");
+      productSection.classList.remove("visible");
+      orderConfirmation.classList.remove("visible");
+    }
+  } catch (error) {
+    console.error("Error loading product:", error);
+  }
+}
+
+// ── Buy now ──────────────────────────────────────────────────────
+async function buyNow() {
+  if (isCheckingOut || !isProductLoaded) return;
+
+  const email = prompt("Ingresa tu correo electrónico para el pedido:");
+
+  if (!email) {
+    alert("No se pudo enviar el pedido.");
+    return;
+  }
+
+  const productId = currentProduct ? currentProduct.productId : "test-product";
+  const quantity = 1;
+
+  isCheckingOut = true;
+  const buyButton = document.querySelector(".buy-button");
+  const buyError = document.getElementById("buyError");
+  buyButton.disabled = true;
+  buyButton.textContent = "PROCESANDO...";
+  buyError.classList.remove("visible");
+
+  try {
+    const response = await fetch(CHECKOUT_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productId: productId,
+        quantity: quantity,
+        email: email,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      // Show confirmation
+      const orderConfirmation = document.getElementById("orderConfirmation");
+      orderConfirmation.classList.add("visible");
+      document.querySelector(".order-confirmation .order-ref").textContent =
+        "Pedido: " + data.orderRef;
+
+      // Hide buy button options
+      document.querySelector(".product-section").classList.remove("visible");
+    } else {
+      document.getElementById("buyError").textContent = data.message || "Error en el pedido.";
+      buyError.classList.add("visible");
+    }
+  } catch (error) {
+    document.getElementById("buyError").textContent = "No se pudo conectar con el servidor.";
+    buyError.classList.add("visible");
+  } finally {
+    isCheckingOut = false;
+    buyButton.disabled = false;
+    buyButton.textContent = "COMPRAR AHORA";
+  }
+}
+
+// ── Poll status every 30 seconds (existing functionality) ────────
+setInterval(() => {
+  if (isProductLoaded) {
+    loadStoreStatus();
+  }
+}, 30000);
+
+// ── Run ──────────────────────────────────────────────────────────
+init();
 </script>
+
 </body>
 </html>
