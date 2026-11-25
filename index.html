@@ -191,5 +191,37 @@
     DROP 30 · 30 UNITS. ONE DROP.
   </footer>
 
+
+<script>
+const API_URL = "https://drop-30-api3.leonsp410.workers.dev/status";
+
+async function checkStoreStatus() {
+  try {
+    const response = await fetch(API_URL, { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error("No se pudo consultar la tienda");
+    }
+
+    const data = await response.json();
+
+    const status = document.querySelector(".status");
+    const units = document.querySelector(".units");
+
+    if (data.unlocked) {
+      status.textContent = "● TIENDA ABIERTA";
+      units.textContent = "EL LANZAMIENTO DE HOY ESTÁ DISPONIBLE.";
+    } else {
+      status.textContent = "● TIENDA BLOQUEADA";
+      units.textContent = "EL PRÓXIMO LANZAMIENTO ESTÁ POR LLEGAR.";
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+checkStoreStatus();
+setInterval(checkStoreStatus, 30000);
+</script>
 </body>
 </html>
