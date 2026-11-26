@@ -59,7 +59,7 @@
           </div>
           <div id="mercadopago-container" style="display:inline-block; margin:10px;"></div>
         </div>
-        <button class="buy-button" id="buy-button" style="display:none;">COMPRAR AHORA</button>
+        <button class="buy-button" id="buy-button" style="display:inline-block; margin-top:20px;">COMPRAR AHORA</button>
         <div class="buy-error" id="buy-error"></div>
         <div class="order-confirmation" id="order-confirmation" style="margin-top:20px; color:#b9a889; font-size:14px; display:none;"></div>
       </div>
@@ -75,14 +75,13 @@
     const API_URL = "https://drop-30-api3.leonsp410.workers.dev/status";
     const PRODUCT_URL = "https://drop-30-api3.leonsp410.workers.dev/product";
     const CHECKOUT_URL = "https://drop-30-api3.leonsp410.workers.dev/checkout";
-    const PRODUCTS_URL = "https://drop-30-api3.leonsp410.workers.dev/products";
+    const PRODUCTS_URL = "https://drop-30-api3.leonsp410.workers.dev/product";
 
     let currentProduct = null;
     let mp = null;
 
     async function init() {
       await loadStoreStatus();
-      initMercadoPago();
     }
 
     async function loadStoreStatus() {
@@ -132,11 +131,8 @@
     }
 
     function initMercadoPago() {
-      // Initialize Mercado Pago SDK
-      const mp = new MercadoPago("TEST_TOKEN_AQUI", {
-        locale: "es-EC",
-        businessId: "DROP-30"
-      });
+      // Mercado Pago se habilita cuando se configure la clave pública real.
+      // Mientras tanto, el pago disponible es el QR de Deuna.
     }
 
     document.getElementById("buy-button").addEventListener("click", async function() {
@@ -165,33 +161,9 @@
       }
     });
 
-    // Mercado Pago payment button
-    document.getElementById("mercadopago-container").addEventListener("click", async function() {
-      if (!currentProduct) return;
-      try {
-        const response = await fetch(PRODUCTS_URL, { cache: "no-store" });
-        const data = await response.json();
-        const product = data.products?.[0];
-        if (product) {
-          // Load Mercado Pago SDK and create payment button
-          const mp = new MercadoPago("TEST_TOKEN_AQUI", { locale: "es-EC" });
-          const button = mp.getPaymentBadge({
-            amount: product.price,
-            paymentMethodId: "master",
-            transactionAmount: product.price,
-            description: product.name,
-            color: "#b9a889",
-            textColor: "#f5f1e9",
-            label: "Pagar con Mercado Pago",
-            wallet: "master",
-          });
-          document.getElementById("mercadopago-container").innerHTML = button;
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    });
-
+    // Mercado Pago: pendiente de credenciales reales. El pago activo es Deuna QR.
+    document.getElementById("mercadopago-container").innerHTML =
+      '<p style="color:#aaa49a; font-size:11px; letter-spacing:1px;">Pronto disponible. Por ahora pague con Deuna QR.</p>';
     setInterval(() => {
       if (document.getElementById("product-section").style.display === "block") {
         loadStoreStatus();
