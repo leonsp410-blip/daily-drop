@@ -66,18 +66,19 @@
   </section>
   <footer>DROP 30 · 30 UNITS. ONE DROP.</footer>
   <script>
-    const API_URL = "https://drop-30-api3.leonsp410.workers.dev/products";
+    const API_URL = "https://drop-30-api3.leonsp410.workers.dev/product";
 
     async function loadProducts() {
       try {
         const response = await fetch(API_URL, { cache: "no-store" });
         const data = await response.json();
-        if (!data.products || data.products.length === 0) {
+        const products = data.product ? [data.product] : [];
+        if (products.length === 0) {
           document.querySelector(".product-grid").innerHTML = '<div class="description" style="text-align:center; color:#aaa49a; max-width:470px; margin:auto;">Aún no hay productos disponibles. ¡Vuelve pronto!</div>';
           return;
         }
         const grid = document.getElementById("product-grid");
-        grid.innerHTML = data.products.map(product => `
+        grid.innerHTML = products.map(product => `
           <div class="product-card">
             <img class="product-img" src="${product.imageUrl}" alt="${product.name}">
             <h2 class="product-name">${product.name}</h2>
